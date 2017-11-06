@@ -2,6 +2,18 @@
 ini_set('display_errors', 'On');
 error_reporting(E_ALL);
  $obj = new main();
+
+ class globals
+        {
+            
+            public static function all($html)
+
+            {
+              echo "$html"; 
+            }
+
+
+          }
  
  
 class main {
@@ -16,26 +28,23 @@ try {
     $conn = new PDO("mysql:host=$servername;dbname=sr943", $username, $password);
     // set the PDO error mode to exception
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    echo "<h3>Connected successfully </h3><br>";    //conection message
-    echo "<hr>";
+    $html="";
+    $html.= "<h3>Connected successfully </h3><hr>";    //conection message
+    globals :: all($html);
     $sel = new select();   //creating an object
     $sel->fetch($conn);    // calling function
-   
+    
 
 
      }
 catch(PDOException $e)
     {
-    echo "<h3>Connection failed:</h3> <br>" . $e->getMessage();
+    $html.= "<h3>Connection failed:</h3> <br>" . $e->getMessage();
     }
  
 }
 
 }
-
-
-
-
 
 class select{
   public function fetch($conn){
@@ -49,35 +58,41 @@ class select{
       $co = new count();
       $co->counting($result);
 
+$html="";
+        
+        $html.="<h3>IDs less then 6 from accounts table are: </h3><br>";
 
-
-echo  "<table style='border: 1px solid black'>";
+        $html.="<table style='border: 1px solid black'>";          
       foreach ($result as $row) {
     
-      echo  "<tr>";
+      $html.="<tr>";
 
       foreach ($row as $column) {
-      echo "<td style='border: 1px solid black'>$column </td>";
+      $html.="<td style='border: 1px solid black'>$column </td>";
       
    }
-  echo  "</tr>";
+  $html.="</tr>";
 }    
-echo  "</table>";
+$html.="</table>";
+
+globals :: all($html);
 
     
-  
-
-$conn = null;
+  $conn = null;
 }
 }
 
 class count{
   public function counting($result){
 
+$count=count($result);
+$html="";
 
-echo "<h3>Number of rows are:</h3>";
-print_r(count($result));
-echo"<hr>";
+
+$html.= "<h3>Number of rows are:</h3>";
+$html.= "<b>$count</b>";                      //counting rows
+$html.="<hr>";
+globals :: all($html);
 
   }
 
